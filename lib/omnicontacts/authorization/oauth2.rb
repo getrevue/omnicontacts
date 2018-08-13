@@ -29,8 +29,8 @@ module OmniContacts
         to_query_string({
             :client_id => client_id,
             :scope => encode(scope),
-            :response_type => response_type,
-            :access_type => 'code',
+            :response_type => 'code',
+            :access_type => access_type,
             :approval_prompt => "auto",
             :redirect_uri => encode(redirect_uri)
           })
