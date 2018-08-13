@@ -21,13 +21,11 @@ module OmniContacts
       end
 
       def fetch_contacts_using_access_token access_token, token_type, opt=nil
-        # fetch_current_user(access_token, access_token_secret, opt[:xoauth_yahoo_guid])
         guid = opt[:xoauth_yahoo_guid]
+        fetch_current_user(access_token, access_token_secret, guid)
         contacts_path = "/v1/user/#{guid}/contacts"
 
-        params = {
-          count: 'max',
-        }
+        params = { count: 'max' }
         header = contacts_req_headers(access_token, token_type)
         contacts_response = https_get(@contacts_host, contacts_path, params, header)
         response = contacts_from_response contacts_response

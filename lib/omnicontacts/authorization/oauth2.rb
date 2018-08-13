@@ -30,7 +30,7 @@ module OmniContacts
             :client_id => client_id,
             :scope => encode(scope),
             :response_type => response_type,
-            :access_type => access_type,
+            :access_type => 'code',
             :approval_prompt => "auto",
             :redirect_uri => encode(redirect_uri)
           })
@@ -40,8 +40,7 @@ module OmniContacts
 
       # Fetches the access token from the authorization server using the given authorization code.
       def fetch_access_token code
-        result = access_token_from_response https_post(auth_host, auth_token_path, token_req_params(code))
-        result
+        access_token_from_response https_post(auth_host, auth_token_path, token_req_params(code))
       end
 
       private

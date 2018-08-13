@@ -13,7 +13,7 @@ module OmniContacts
     class OAuth2 < BaseOAuth
       include Authorization::OAuth2
 
-      attr_reader :client_id, :client_secret, :redirect_path, :access_type, :response_type
+      attr_reader :client_id, :client_secret, :redirect_path, :access_type
 
       def initialize app, client_id, client_secret, options ={}
         super app, options
@@ -22,7 +22,6 @@ module OmniContacts
         @redirect_path = options[:redirect_path] || "#{ MOUNT_PATH }#{class_name}/callback"
         @ssl_ca_file = options[:ssl_ca_file]
         @access_type = options[:access_type] || "online"
-        @response_type = options[:response_type] || "code"
       end
 
       def request_authorization_from_user
