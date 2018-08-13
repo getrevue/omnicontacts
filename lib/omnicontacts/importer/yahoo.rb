@@ -25,7 +25,9 @@ module OmniContacts
         guid = opt[:xoauth_yahoo_guid]
         contacts_path = "/v1/user/#{guid}/contacts"
 
-        params = {}
+        params = {
+          count: 'max',
+        }
         header = contacts_req_headers(access_token, token_type)
         contacts_response = https_get(@contacts_host, contacts_path, params, header)
         response = contacts_from_response contacts_response
