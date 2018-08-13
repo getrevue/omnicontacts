@@ -60,6 +60,7 @@ module OmniContacts
           }
           contacts = fetch_contacts_using_access_token(access_token, token_type, opt)
           session[refresh_token_prop_name(code)] = refresh_token if refresh_token
+          session[access_token_prop_name(code)] = access_token if access_token
           contacts
         else
           raise AuthorizationError.new("User did not grant access to contacts list")
@@ -68,6 +69,10 @@ module OmniContacts
 
       def refresh_token_prop_name code
         "#{base_prop_name}.#{code}.refresh_token"
+      end
+
+      def access_token_prop_name code
+        "#{base_prop_name}.#{code}.access_token"
       end
 
     end
