@@ -46,13 +46,21 @@ module OmniContacts
         code = query_string_to_map(@env["QUERY_STRING"])["code"]
         if code
           refresh_token = session[refresh_token_prop_name(code)]
-          (access_token, token_type, refresh_token) = if refresh_token
-                                                        refresh_access_token(refresh_token)
-                                                      else
-                                                        fetch_access_token(code)
-                                                      end
-          contacts = fetch_contacts_using_access_token(access_token, token_type)
+          if refresh_token
+            response = refresh_access_token(refresh_token)
+          else
+            response = fetch_access_token(code)
+          end
+
+          access_token = response[:access_token]
+          token_type = response[:token_type]
+          refresh_token = response[:refresh_token]
+          opt = {
+            xoauth_yahoo_guid: response[:xoauth_yahoo_guid]
+          }
+          contacts = fetch_contacts_using_access_token(access_token, token_type, opt)
           session[refresh_token_prop_name(code)] = refresh_token if refresh_token
+          session[access_token_prop_name(code)] = access_token if access_token
           contacts
         else
           raise AuthorizationError.new("User did not grant access to contacts list")
@@ -61,6 +69,10 @@ module OmniContacts
 
       def refresh_token_prop_name code
         "#{base_prop_name}.#{code}.refresh_token"
+      end
+
+      def access_token_prop_name code
+        "#{base_prop_name}.#{code}.access_token"
       end
 
     end

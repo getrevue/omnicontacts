@@ -29,7 +29,7 @@ module OmniContacts
         to_query_string({
             :client_id => client_id,
             :scope => encode(scope),
-            :response_type => "code",
+            :response_type => 'code',
             :access_type => access_type,
             :approval_prompt => "auto",
             :redirect_uri => encode(redirect_uri)
@@ -61,7 +61,13 @@ module OmniContacts
         end
         json = JSON.parse(response)
         raise json["error"] if json["error"]
-        [json["access_token"], json["token_type"], json["refresh_token"]]
+        result = {
+          access_token: json["access_token"],
+          token_type: json["token_type"],
+          refresh_token: json["refresh_token"],
+          xoauth_yahoo_guid: json["xoauth_yahoo_guid"], # Only used for yahoo
+        }
+        result
       end
 
       public
