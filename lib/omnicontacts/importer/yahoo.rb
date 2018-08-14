@@ -22,7 +22,7 @@ module OmniContacts
 
       def fetch_contacts_using_access_token access_token, token_type, opt=nil
         guid = opt[:xoauth_yahoo_guid]
-        fetch_current_user(access_token, access_token_secret, guid)
+        fetch_current_user(access_token, token_type, guid)
         contacts_path = "/v1/user/#{guid}/contacts"
 
         params = { count: 'max' }
@@ -32,9 +32,10 @@ module OmniContacts
         response
       end
 
-      def fetch_current_user access_token, access_token_secret, guid
+      def fetch_current_user access_token, token_type, guid
         self_path = "/v1/user/#{guid}/profile"
-        self_response =  https_get(@contacts_host, self_path, contacts_req_params(access_token, access_token_secret, self_path))
+        header = contacts_req_headers(access_token, token_type)
+        self_response =  https_get(@contacts_host, self_path, {}, header)
         user = current_user self_response
         set_current_user user
       end
